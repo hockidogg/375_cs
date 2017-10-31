@@ -15,23 +15,34 @@
 
 import random
 
+winnings = 100
+bet = 0
+
 
 def main():
+    global winnings, bet
     display_welcome()
-
     play_again = True
     while play_again:
+        place_bet()
         total = roll_dice()
         if total == 7 or total == 11:
             print("You win!")
+            winnings = winnings + bet
         elif total == 2 or total == 3 or total == 12:
             print("You lose!")
+            winnings = winnings - bet
         else:
             re_roll(total)
-
+        print ("you have $", winnings)
         print() # Blank line for spacing
-        play_again = (input("Press enter to play another round or type 'N' to quit ") == '')
-        clear_screen()
+        if winnings >= 5:
+            play_again = (input("Press enter to play another round or type 'N' to quit ") == '')
+            clear_screen()
+        else:
+            print("no more winnings, game quiting")
+            play_again = False
+
 
 
 def clear_screen():
@@ -46,6 +57,18 @@ def display_welcome():
     print("$                                              $")
     print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     print()
+
+
+def place_bet():
+    global winnings,bet
+    bet = eval(input("what is your bet "))
+    if bet > winnings:
+        print("insignificant funds, betting winnings")
+
+        bet = winnings
+    elif bet < 5:
+        print ("bet has to be 5$ or over, betting 5$")
+        bet = 5
 
 
 def roll_dice():
@@ -65,6 +88,7 @@ def roll_dice():
 
 
 def re_roll(point):
+    global winnings, bet
     print("You have to keep rolling until you get another", point)
     print() # Blank line for spacing
 
@@ -74,8 +98,9 @@ def re_roll(point):
 
     if total == point:
         print("You win!")
+        winnings = winnings + bet
     else:
         print("You lose!")
-
+        winnings = winnings - bet
 
 main()
